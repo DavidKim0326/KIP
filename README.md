@@ -22,6 +22,8 @@ KIP solves this.
 
 **It never interrupts your conversation. It silently captures deferred tasks and surfaces them at exactly the right moment.**
 
+> Just remember one thing: **"insert kip"**.
+
 ---
 
 ## What KIP Does
