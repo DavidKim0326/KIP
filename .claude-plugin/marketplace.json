@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "KIP — Lightweight Task Queue Plugin for Claude Code",
-    "version": "1.2.0"
+    "version": "1.2.1"
   },
   "plugins": [
     {
       "name": "kip",
       "source": "./",
       "description": "A silent task queue that captures deferred tasks from natural conversation and surfaces them at the right moment. Zero-config, pure prompt skill.",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": {
         "name": "DavidKim0326"
       },

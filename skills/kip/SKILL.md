@@ -110,17 +110,28 @@ Respond only: `🐾 ok` — and never ask again in this conversation.
 
 ## Persistence — .kip.json (v1.2)
 
-KIP queue persists across sessions via `.kip.json` in the project root. Without this, every new conversation starts with an empty queue and the user loses track of deferred tasks — the exact problem KIP exists to solve.
+KIP queue persists across sessions via `.kip.json` in the project root. The `kip-hook.js` hook handles loading automatically — on every user prompt, it reads `.kip.json` and injects the queue state into context. This means you always have the current queue even at session start, without needing to manually read the file.
 
-### Session Start
+### How It Works (Hook-Driven)
 
-On every session start, check for `.kip.json`:
+The hook (`hooks/kip-hook.js`) runs on every `UserPromptSubmit`:
+1. Reads `.kip.json` from the project root
+2. Injects queue contents into context with a `[KIP]` prefix
+3. Detects deferred intent signals in the user's message
+4. Reminds you to write `.kip.json` after any queue change
 
-```bash
-cat .kip.json 2>/dev/null
-```
+You only need to handle **writing** — the hook handles reading.
 
-If the file exists and contains a valid queue, load it into conversation context. If it doesn't exist, start with an empty queue (create the file on first capture).
+### Writing .kip.json
+
+After EVERY queue mutation, use the **Write tool** to save the full queue to `.kip.json`. This is not optional — if you capture a task but don't write `.kip.json`, the task will be lost when the session ends.
+
+Write on:
+- **Capture** → write full queue including new item
+- **`kip done {x}`** → write queue without the removed item
+- **`kip! {x}`** → write queue without the elevated item
+- **`kip clear`** → write `{"queue": []}`
+- **Eviction** (overflow) → write queue after eviction
 
 ### File Format
 
@@ -132,33 +143,16 @@ If the file exists and contains a valid queue, load it into conversation context
       "original": "auth 끝나면 테스트도 추가해야 하는데",
       "condition": "⊕",
       "context": "auth"
-    },
-    {
-      "label": "docs",
-      "original": "나중에 문서 업데이트 해야 함",
-      "condition": "⚑",
-      "context": ""
     }
   ]
 }
 ```
 
-### When to Write
-
-Update `.kip.json` on every queue mutation:
-- **Capture** → append to queue array
-- **`kip done {x}`** → remove matching item
-- **`kip! {x}`** → remove after handling
-- **`kip clear`** → write empty queue `{"queue": []}`
-- **Eviction** (overflow) → write after eviction
-
-Write silently — no confirmation or output for file operations. The user should never notice the persistence mechanism.
-
 ### Rules
-- Always read `.kip.json` at session start before any KIP operations
-- Write atomically (full file rewrite, not append) to prevent corruption
-- If `.kip.json` is malformed, start fresh with an empty queue and overwrite the file
-- `.kip.json` should be added to `.gitignore` — it's personal workspace state, not code
+- The hook injects queue state automatically — do not read `.kip.json` manually
+- Write the full file (atomic rewrite) after every mutation using the Write tool
+- If the hook reports malformed data, start fresh with `{"queue": []}`
+- `.kip.json` should be in `.gitignore` — it's personal workspace state
 
 ---
 
@@ -169,6 +163,7 @@ Write silently — no confirmation or output for file operations. The user shoul
 3. If queue is empty → **no KIP line at all**. Complete silence.
 4. Capture confirmation = **3 tokens max**. Example: `🐾 +auth⚑`
 5. All labels compressed — no punctuation, no full sentences, 2-5 characters.
+6. After EVERY queue mutation, **immediately write** the full queue to `.kip.json` using the Write tool. No exceptions — this is how tasks survive across sessions.
 
 ---
 

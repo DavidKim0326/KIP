@@ -2,6 +2,19 @@
 
 All notable changes to KIP will be documented in this file.
 
+## [1.2.1] - 2026-03-14
+
+### Added
+- **kip-hook.js** — UserPromptSubmit hook for reliable persistence
+  - Reads `.kip.json` on every prompt and injects queue state into context
+  - Detects deferred intent signals (EN/KR) and flags them for capture
+  - Eliminates the "auto-creation not firing" problem from prompt-only approach
+- Core Rule #6: "After EVERY queue mutation, immediately write .kip.json"
+
+### Fixed
+- README inconsistencies: Queue Management scope, "What KIP is NOT" wording
+- Project Structure now shows kip-hook.js
+
 ## [1.2.0] - 2026-03-14
 
 ### Added

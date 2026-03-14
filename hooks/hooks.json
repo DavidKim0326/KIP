@@ -1,5 +1,17 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-hooks.json",
   "description": "KIP — Lightweight Task Queue Skill for Claude Code",
-  "hooks": {}
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/kip-hook.js",
+            "timeout": 3000
+          }
+        ]
+      }
+    ]
+  }
 }

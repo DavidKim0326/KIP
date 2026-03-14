@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-blueviolet)](https://claude.ai/claude-code)
-[![Version](https://img.shields.io/badge/version-1.2.0-green)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.1-green)](CHANGELOG.md)
 [![Eval TCs](https://img.shields.io/badge/Eval%20TCs-8%20cases-brightgreen)](evals/evals.json)
 
 ---
@@ -248,7 +248,7 @@ You start: "Let's add the auth middleware..."
 |------|--------|
 | Max items | 5 active entries |
 | Overflow | Evict oldest `⚑` first, then oldest `→` |
-| Scope | Conversation-only (no persistent storage) |
+| Scope | Persisted to `.kip.json` — survives across sessions (v1.2+) |
 | Display order | `⊕` first → `→` → `⚑` |
 
 ---
@@ -261,7 +261,8 @@ KIP/
 │   └── kip/
 │       └── SKILL.md          ← Main skill definition (Claude Code reads this)
 ├── hooks/
-│   └── hooks.json            ← Plugin hook registration (auto-loaded)
+│   ├── hooks.json            ← Plugin hook registration (auto-loaded)
+│   └── kip-hook.js           ← Session persistence + deferred intent detection
 ├── evals/
 │   └── evals.json            ← 8 skill validation test cases
 ├── references/
@@ -337,7 +338,7 @@ KIP was designed for bilingual workflows. Many developers think and code-switch 
 - **NOT** a replacement for issue trackers
 - **NOT** a priority system with deadlines
 
-KIP is a **conversation-scoped scratchpad for deferred intentions**. Nothing more, nothing less.
+KIP is a **lightweight scratchpad for deferred intentions**, persisted via `.kip.json`. Nothing more, nothing less.
 
 ---
 
