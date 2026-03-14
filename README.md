@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-blueviolet)](https://claude.ai/claude-code)
-[![Version](https://img.shields.io/badge/version-1.1.0-green)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-green)](CHANGELOG.md)
 [![Eval TCs](https://img.shields.io/badge/Eval%20TCs-8%20cases-brightgreen)](evals/evals.json)
 
 ---
@@ -141,6 +141,25 @@ KIP is engineered for minimal token overhead.
 | Normal KIP line | ~10 |
 | Capture confirmation | ~3 |
 | Full briefing (`kip?`) | ~60 |
+
+---
+
+## Session Persistence *(v1.2)*
+
+KIP queue now survives across sessions. Tasks are saved to `.kip.json` in the project root.
+
+```json
+{
+  "queue": [
+    {"label": "test", "original": "auth 끝나면 테스트도 추가해야 하는데", "condition": "⊕", "context": "auth"},
+    {"label": "docs", "original": "나중에 문서 업데이트 해야 함", "condition": "⚑", "context": ""}
+  ]
+}
+```
+
+- **Auto-load**: New session reads `.kip.json` and restores the queue
+- **Auto-save**: Every capture, done, clear auto-writes silently
+- **Add to `.gitignore`**: It's personal workspace state, not code
 
 ---
 
@@ -291,7 +310,7 @@ KIP/
 
 ### Does KIP persist across conversations?
 
-No. KIP is conversation-scoped by design. Each new conversation starts with an empty queue. This keeps it lightweight and avoids stale tasks accumulating.
+Yes (v1.2+). KIP saves the queue to `.kip.json` in the project root. New sessions auto-load the previous queue. Use `kip clear` to start fresh if needed.
 
 ### What if KIP captures something I didn't intend?
 
@@ -314,7 +333,7 @@ KIP was designed for bilingual workflows. Many developers think and code-switch 
 ## What KIP is NOT
 
 - **NOT** a project management tool
-- **NOT** a persistent todo list
+- **NOT** a full-featured todo list with deadlines
 - **NOT** a replacement for issue trackers
 - **NOT** a priority system with deadlines
 

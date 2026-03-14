@@ -12,6 +12,7 @@ description: >
 
   Commands: kip? (briefing), kip done {x} (clear), kip! {x} (elevate), kip clear (wipe).
 
+  Persists queue to .kip.json — tasks survive across sessions automatically.
   Pure prompt skill — no scripts, no dependencies. Zero-config, works immediately.
 ---
 
@@ -104,6 +105,60 @@ Respond only: `🐾 ok` — and never ask again in this conversation.
 - Never ask if CLAUDE.md already has a KIP section
 - This setup prompt does NOT count against the 3-token capture budget
 - After setup, proceed with normal KIP behavior immediately
+
+---
+
+## Persistence — .kip.json (v1.2)
+
+KIP queue persists across sessions via `.kip.json` in the project root. Without this, every new conversation starts with an empty queue and the user loses track of deferred tasks — the exact problem KIP exists to solve.
+
+### Session Start
+
+On every session start, check for `.kip.json`:
+
+```bash
+cat .kip.json 2>/dev/null
+```
+
+If the file exists and contains a valid queue, load it into conversation context. If it doesn't exist, start with an empty queue (create the file on first capture).
+
+### File Format
+
+```json
+{
+  "queue": [
+    {
+      "label": "test",
+      "original": "auth 끝나면 테스트도 추가해야 하는데",
+      "condition": "⊕",
+      "context": "auth"
+    },
+    {
+      "label": "docs",
+      "original": "나중에 문서 업데이트 해야 함",
+      "condition": "⚑",
+      "context": ""
+    }
+  ]
+}
+```
+
+### When to Write
+
+Update `.kip.json` on every queue mutation:
+- **Capture** → append to queue array
+- **`kip done {x}`** → remove matching item
+- **`kip! {x}`** → remove after handling
+- **`kip clear`** → write empty queue `{"queue": []}`
+- **Eviction** (overflow) → write after eviction
+
+Write silently — no confirmation or output for file operations. The user should never notice the persistence mechanism.
+
+### Rules
+- Always read `.kip.json` at session start before any KIP operations
+- Write atomically (full file rewrite, not append) to prevent corruption
+- If `.kip.json` is malformed, start fresh with an empty queue and overwrite the file
+- `.kip.json` should be added to `.gitignore` — it's personal workspace state, not code
 
 ---
 
@@ -295,9 +350,9 @@ Clear entire queue.
   3. Never auto-evict ⊕ items (they're contextually relevant)
 
 ### State
-- Queue lives in conversation context (ephemeral)
-- New conversation = empty queue
-- No persistent storage required
+- Queue is persisted to `.kip.json` in the project root (v1.2+)
+- On session start, load from `.kip.json` if it exists
+- Queue mutations auto-save to `.kip.json` silently
 
 ---
 
@@ -356,6 +411,5 @@ Every response should follow this structure:
 
 - NOT a project management tool
 - NOT a todo list with priorities and deadlines
-- NOT persistent across conversations
 - NOT a replacement for issue trackers
-- KIP is a **conversation-scoped scratchpad for deferred intentions**
+- KIP is a **lightweight scratchpad for deferred intentions**, persisted via `.kip.json`

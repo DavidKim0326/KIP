@@ -2,6 +2,19 @@
 
 All notable changes to KIP will be documented in this file.
 
+## [1.2.0] - 2026-03-14
+
+### Added
+- **Session persistence** — Queue now persists across sessions via `.kip.json`
+  - On session start, KIP loads existing queue from `.kip.json` in project root
+  - Every queue mutation (capture, done, clear, eviction) auto-saves silently
+  - Malformed files are auto-recovered (start fresh)
+  - `.kip.json` should be added to `.gitignore` (personal workspace state)
+
+### Changed
+- Queue state is no longer ephemeral — tasks survive across conversations
+- Description updated to reflect persistence capability
+
 ## [1.1.0] - 2026-03-14
 
 ### Added
