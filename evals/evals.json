@@ -1,0 +1,106 @@
+{
+  "skill_name": "kip",
+  "version": "1.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "mode": "CAPTURE",
+      "prompt": "Fix the login validation. Oh, and I also need to update the API docs later.",
+      "expected_output": "KIP captures 'docs' as a deferred task with ⚑ condition. Capture confirmation appears inline as '🐾 +docs⚑'. Normal response addresses login validation.",
+      "expectations": [
+        "Login validation fix is addressed normally",
+        "Deferred task 'docs' or 'API docs' is captured",
+        "Condition type is ⚑ (anytime/later)",
+        "Capture confirmation appears as 🐾 +docs⚑ or similar (3 tokens max)",
+        "Conversation flow is NOT interrupted for the capture"
+      ]
+    },
+    {
+      "id": 2,
+      "mode": "CAPTURE",
+      "prompt": "After we finish the auth middleware, we need to update the RLS policies too.",
+      "expected_output": "KIP captures 'RLS' as a sequential task with → condition (after auth). Capture confirmation appears inline.",
+      "expectations": [
+        "Deferred task related to RLS is captured",
+        "Condition type is → (after this task)",
+        "Context tag is 'auth' or 'middleware'",
+        "Capture confirmation is ~3 tokens",
+        "Main response focuses on auth middleware"
+      ]
+    },
+    {
+      "id": 3,
+      "mode": "CONTEXT_MATCH",
+      "prompt": "Let's add the auth validation middleware now. [Queue already has: [auth⊕]RLS]",
+      "expected_output": "KIP detects context match — user is working on auth, and queue has auth-related item. Shows 🔥 elevation.",
+      "expectations": [
+        "Context match (🔥) is detected between current work (auth) and queue item",
+        "Elevated display format is used: 🔥 kip·auth [now!] RLS — handle together?",
+        "User is asked whether to handle the queued item now",
+        "Normal response content is still provided"
+      ]
+    },
+    {
+      "id": 4,
+      "mode": "COMMAND",
+      "prompt": "kip?",
+      "expected_output": "KIP shows full briefing with all pending items grouped by condition type.",
+      "expectations": [
+        "Full briefing format is displayed",
+        "Pending count is shown",
+        "Items are grouped by condition type (⊕, →, ⚑)",
+        "Context and label are shown for each item",
+        "Total output stays under ~30 tokens"
+      ]
+    },
+    {
+      "id": 5,
+      "mode": "COMMAND",
+      "prompt": "kip done docs",
+      "expected_output": "KIP removes the 'docs' item from queue and confirms with ✓.",
+      "expectations": [
+        "Item matching 'docs' is removed from queue",
+        "Confirmation is ✓ (minimal)",
+        "Remaining queue items still display in status line if any exist"
+      ]
+    },
+    {
+      "id": 6,
+      "mode": "DISPLAY",
+      "prompt": "Continue working on the component. [Queue has 3 items: auth⊕test, docs⚑update, deploy→env]",
+      "expected_output": "Normal response with KIP status line as absolute last line showing all 3 items.",
+      "expectations": [
+        "Normal response content is provided",
+        "KIP line appears as the absolute LAST line",
+        "All 3 items are displayed in compressed format",
+        "Display order: ⊕ first, then →, then ⚑",
+        "Total KIP line is ~10 tokens or less"
+      ]
+    },
+    {
+      "id": 7,
+      "mode": "DISPLAY",
+      "prompt": "Continue working on the component. [Queue is empty]",
+      "expected_output": "Normal response with NO KIP line at all.",
+      "expectations": [
+        "Normal response content is provided",
+        "No 🐾 line appears anywhere",
+        "No mention of KIP or queue",
+        "Complete silence from KIP when queue is empty"
+      ]
+    },
+    {
+      "id": 8,
+      "mode": "CAPTURE_KR",
+      "prompt": "이 함수 리팩토링 해줘. 근데 나중에 테스트도 추가해야 하는데 일단 넘어가자.",
+      "expected_output": "KIP captures 'test' from Korean deferred intent. Addresses refactoring normally.",
+      "expectations": [
+        "Korean deferred intent ('나중에', '일단 넘어가고') is detected",
+        "Task 'test' or '테스트' is captured",
+        "Condition type is ⚑ (나중에 = later = anytime)",
+        "Capture confirmation appears inline",
+        "Refactoring is addressed as the main task"
+      ]
+    }
+  ]
+}

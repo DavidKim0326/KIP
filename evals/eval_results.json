@@ -1,0 +1,13 @@
+{
+  "skill_name": "kip",
+  "version": "1.0.0",
+  "run_date": null,
+  "results": [],
+  "summary": {
+    "total": 8,
+    "passed": 0,
+    "failed": 0,
+    "pending": 8,
+    "weighted_avg": null
+  }
+}

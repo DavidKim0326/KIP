@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-hooks.json",
+  "description": "KIP — Lightweight Task Queue Skill for Claude Code",
+  "hooks": {}
+}
