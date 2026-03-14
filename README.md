@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-blueviolet)](https://claude.ai/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.0-green)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.1.0-green)](CHANGELOG.md)
 [![Eval TCs](https://img.shields.io/badge/Eval%20TCs-8%20cases-brightgreen)](evals/evals.json)
 
 ---
@@ -68,7 +68,7 @@ KIP solves this.
 | **CAPTURE** | Detects side-tasks from natural conversation → queues them silently |
 | **DISPLAY** | Shows current queue as a single last line of every response |
 | **SUGGEST** | When current work intersects a queued item → auto-suggests |
-| **RECALL** | `kip?` expands the full briefing on demand |
+| **RECALL** | `kip?` expands the full briefing with original sentences |
 | **CLEAR** | Complete items instantly with `kip done {x}` |
 
 ---
@@ -96,15 +96,17 @@ Embedding function complete. Filtering with match_threshold 0.78...
 🔥 kip·auth [now!] add RLS policy — handle together?
 ```
 
-### `kip?` — full briefing, only when you ask
+### `kip?` — full briefing with original sentences *(v1.1)*
 
 ```
 🐾 ── 3 pending ──────────────────
-⊕ auth시   → test
-⚑ anytime  → docs
-→ deploy후 → env
+⊕ auth시   → test   "auth 끝나면 테스트도 추가해야 하는데"
+⚑ anytime  → docs   "나중에 문서 업데이트 해야 함"
+→ deploy후 → env    "배포 끝나면 환경변수 확인"
 ─────────────────────────────────
 ```
+
+The compressed label keeps the status line light. The original sentence restores what you actually said — so you never lose context.
 
 ---
 
@@ -138,7 +140,7 @@ KIP is engineered for minimal token overhead.
 |-----------|--------------|
 | Normal KIP line | ~10 |
 | Capture confirmation | ~3 |
-| Full briefing (`kip?`) | ~30 |
+| Full briefing (`kip?`) | ~60 |
 
 ---
 

@@ -159,13 +159,17 @@ From the captured utterance, extract:
    - "add unit tests" → `test`
    - "리팩토링 해야" → `refac`
 
-2. **Condition type**: Classify based on temporal signal:
+2. **Original sentence**: Store the user's exact words that triggered the capture. This is the sentence or phrase the user said when they deferred the task. The compressed label is for display; the original sentence is for recall.
+   - User said: "나중에 테스트도 추가해야 하는데" → label `test`, original: "나중에 테스트도 추가해야 하는데"
+   - User said: "insert kip check rate limits after deploy" → label `rate`, original: "check rate limits after deploy"
+
+3. **Condition type**: Classify based on temporal signal:
    - "while we're at it", "also", "같이" → ⊕ (co-task)
    - "later", "eventually", "나중에", "언제든" → ⚑ (anytime)
    - "after this", "when done", "끝나면", "다음에" → → (sequential)
    - (🔥 is never assigned at capture — only on context match)
 
-3. **Context tag**: What current work triggered this capture.
+4. **Context tag**: What current work triggered this capture.
    - Working on auth → context is `auth`
    - Deploying → context is `deploy`
 
@@ -233,30 +237,30 @@ Trigger conditions for 🔥:
 
 ### 4. Full Briefing (`kip?` command)
 
-Only shown when user explicitly asks `kip?`.
+Only shown when user explicitly asks `kip?`. This is where the original sentence is restored — the compressed labels are useful for the status line, but when the user asks "what did I queue?", they need to see what they actually said.
 
 Format:
 ```
 🐾 ── N pending ──────────────────
-⊕ context시  → label
-⚑ anytime    → label
-→ context후  → label
+⊕ context시  → label  "original sentence"
+⚑ anytime    → label  "original sentence"
+→ context후  → label  "original sentence"
 ─────────────────────────────────
 ```
 
 Example:
 ```
 🐾 ── 3 pending ──────────────────
-⊕ auth시   → test
-⚑ anytime  → docs
-→ deploy후 → notify
+⊕ auth시   → test   "auth 끝나면 테스트도 추가해야 하는데"
+⚑ anytime  → docs   "나중에 문서 업데이트 해야 함"
+→ deploy후 → notify  "배포 끝나면 팀에 알려줘"
 ─────────────────────────────────
 ```
 
 Rules:
-- Max ~30 tokens for the entire briefing
 - Group by condition type
-- Show context + label for each item
+- Show context + label + original sentence for each item
+- Original sentence in quotes, as the user wrote it
 
 ---
 
@@ -321,7 +325,7 @@ When 🔥 fires:
 |-----------|--------|-------------|
 | Status line | ~10 tokens | Truncate labels, drop lowest-priority items |
 | Capture confirmation | ~3 tokens | Fixed format, never exceeds |
-| Briefing (kip?) | ~30 tokens | Truncate descriptions |
+| Briefing (kip?) | ~60 tokens | Truncate original sentences if needed |
 | Context match | ~15 tokens | Fixed format |
 
 **Never exceed these budgets.** KIP's value is being lightweight. If in doubt, show less.

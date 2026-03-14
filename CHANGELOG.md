@@ -2,6 +2,19 @@
 
 All notable changes to KIP will be documented in this file.
 
+## [1.1.0] - 2026-03-14
+
+### Added
+- **Original sentence recall** — KIP now remembers the user's exact words when a task is captured, not just the compressed label
+  - Normal status line stays compressed (no change to `🐾 [auth⊕]test`)
+  - `kip?` briefing now shows the original sentence alongside each item
+  - Example: `⊕ auth시 → test  "auth 끝나면 테스트도 추가해야 하는데"`
+  - Helps users recall context when reviewing queued tasks
+
+### Changed
+- Briefing token budget increased from ~30 to ~60 to accommodate original sentences
+- Extraction algorithm now stores 4 fields: label, original sentence, condition type, context tag
+
 ## [1.0.0] - 2026-03-14
 
 ### Added
