@@ -1,0 +1,32 @@
+{
+  "name": "kip-marketplace",
+  "owner": {
+    "name": "DavidKim0326",
+    "email": "davidkim0326@users.noreply.github.com"
+  },
+  "metadata": {
+    "description": "KIP — Lightweight Task Queue Plugin for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "kip",
+      "source": "./",
+      "description": "A silent task queue that captures deferred tasks from natural conversation and surfaces them at the right moment. Zero-config, pure prompt skill.",
+      "version": "1.0.0",
+      "author": {
+        "name": "DavidKim0326"
+      },
+      "repository": "https://github.com/DavidKim0326/kip",
+      "license": "MIT",
+      "keywords": [
+        "task-queue",
+        "productivity",
+        "ambient",
+        "lightweight",
+        "conversation"
+      ],
+      "category": "productivity"
+    }
+  ]
+}
