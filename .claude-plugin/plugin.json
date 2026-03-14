@@ -1,6 +1,6 @@
 {
   "name": "kip",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "KIP — Lightweight Task Queue. A silent task queue that captures deferred tasks from conversation and surfaces them at the right moment.",
   "author": {
     "name": "DavidKim0326"
