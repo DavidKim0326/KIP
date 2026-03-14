@@ -138,11 +138,38 @@ You should see `🐾 +docs⚑` appear naturally in the response.
 
 ---
 
+## Auto-Setup (CLAUDE.md Integration)
+
+On first use in a project, KIP asks once:
+
+```
+🐾 KIP is active for this conversation. Want me to add KIP to this project's
+   CLAUDE.md so it loads automatically every session? (y/n)
+```
+
+If you say **yes**, KIP adds itself to your `CLAUDE.md` — from then on, every new Claude Code session in that project has KIP running by default. No manual activation needed.
+
+If you say **no**, KIP works for the current conversation only.
+
+---
+
 ## How KIP Captures Tasks
 
-KIP listens for natural language signals that imply deferred action:
+KIP listens for natural language signals that imply deferred action.
 
-### English Triggers
+### Explicit Triggers — tell KIP directly
+
+| Command | Example |
+|---------|---------|
+| `insert kip {task}` | "insert kip check rate limits" |
+| `kip insert {task}` | "kip insert update env vars" |
+| `add to kip {task}` | "add to kip review PR" |
+| `킵에 넣어 {task}` | "킵에 넣어 RLS 확인" |
+| `킵 추가 {task}` | "킵 추가 테스트 작성" |
+
+Explicit triggers always capture. Default condition: `⚑` (anytime).
+
+### Implicit English Triggers
 
 | Signal | Example |
 |--------|---------|
@@ -153,7 +180,7 @@ KIP listens for natural language signals that imply deferred action:
 | "don't forget" | "Don't forget the env variables" |
 | "before we ship" | "Before we ship, run the audit" |
 
-### Korean Triggers
+### Implicit Korean Triggers
 
 | Signal | Example |
 |--------|---------|

@@ -61,6 +61,52 @@ KIP silently captures these asides, compresses them into ultra-minimal labels, a
 
 ---
 
+## First Run — Auto-Setup
+
+On the **very first interaction** where KIP activates in a project, check if the project's `CLAUDE.md` already contains a KIP section.
+
+### Detection
+```
+grep -q "KIP" CLAUDE.md 2>/dev/null
+```
+
+### If KIP section NOT found:
+
+Ask the user **once**, briefly, at the end of your response (before the KIP status line):
+
+```
+🐾 KIP is active for this conversation. Want me to add KIP to this project's CLAUDE.md so it loads automatically every session? (y/n)
+```
+
+### If user says yes (y, yes, 응, ㅇ, 넣어, 추가해):
+
+Append this section to the project's `CLAUDE.md`:
+
+```markdown
+
+## KIP — Task Queue
+
+KIP is enabled for this project. It silently captures deferred tasks from conversation and surfaces them at the right moment.
+
+- KIP runs automatically in every session
+- Commands: `kip?` (briefing), `kip done {x}` (complete), `kip! {x}` (elevate), `kip clear` (wipe)
+- Say "insert kip {task}" or "킵에 넣어 {task}" to explicitly add items
+```
+
+Confirm with: `🐾 CLAUDE.md updated — KIP will auto-load in future sessions.`
+
+### If user says no:
+
+Respond only: `🐾 ok` — and never ask again in this conversation.
+
+### Rules:
+- Ask **only once per project** (check CLAUDE.md first)
+- Never ask if CLAUDE.md already has a KIP section
+- This setup prompt does NOT count against the 3-token capture budget
+- After setup, proceed with normal KIP behavior immediately
+
+---
+
 ## Core Rules (INVIOLABLE)
 
 1. **NEVER** break conversation flow for KIP operations. KIP is invisible infrastructure.
@@ -77,14 +123,21 @@ KIP silently captures these asides, compresses them into ultra-minimal labels, a
 
 Capture a queue entry when the user says something that implies a deferred action. Look for these signals:
 
-**English triggers:**
+**Explicit triggers (highest priority — always capture):**
+- "insert kip {task}", "kip insert {task}", "add to kip {task}"
+- "킵에 넣어 {task}", "킵 추가 {task}", "킵에 추가 {task}"
+- "kip {task}", "킵 {task}" (when followed by a task description)
+
+When explicit triggers are used, extract the task directly from the message. No inference needed — the user is explicitly telling KIP to queue something. Use ⚑ as default condition unless the user specifies otherwise.
+
+**English triggers (implicit — detect deferred intent):**
 - "later", "after this", "when done", "when we're done"
 - "also need to", "don't forget", "remind me"
 - "should also", "need to eventually", "at some point"
 - "before we ship", "before release"
 - Any aside that contains an action verb + deferral signal
 
-**Korean triggers:**
+**Korean triggers (implicit):**
 - "나중에", "일단 넘어가고", "이것도 해야"
 - "참고로", "근데", "끝나면", "그리고"
 - "해야 하는데", "잊지 말고", "나중에 보자"
