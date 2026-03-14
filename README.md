@@ -9,6 +9,41 @@
 
 ---
 
+## Quick Start
+
+### Installation (Plugin Marketplace)
+
+**Two commands — that's it.**
+
+**1.**
+```bash
+/plugin marketplace add DavidKim0326/KIP
+```
+
+**2.**
+```bash
+/plugin install kip
+```
+
+### Alternative: Manual Installation
+
+```bash
+git clone https://github.com/DavidKim0326/KIP.git
+cp -r KIP ~/.claude/skills/kip
+```
+
+### Verify
+
+Start a new Claude Code session and say something like:
+
+```
+"Fix the login bug. Oh, and I also need to update the docs later."
+```
+
+You should see `🐾 +docs⚑` appear naturally in the response.
+
+---
+
 ## Why KIP
 
 When working with AI, this happens constantly:
@@ -104,39 +139,6 @@ KIP is engineered for minimal token overhead.
 | Normal KIP line | ~10 |
 | Capture confirmation | ~3 |
 | Full briefing (`kip?`) | ~30 |
-
----
-
-## Installation
-
-### Plugin Marketplace (Recommended)
-
-**Two commands — that's it.**
-
-```bash
-# 1. Add the marketplace
-/plugin marketplace add DavidKim0326/KIP
-
-# 2. Install the plugin
-/plugin install kip
-```
-
-### Alternative: Manual Installation
-
-```bash
-git clone https://github.com/DavidKim0326/KIP.git
-cp -r KIP ~/.claude/skills/kip
-```
-
-### Verify
-
-Start a new Claude Code session and say something like:
-
-```
-"Fix the login bug. Oh, and I also need to update the docs later."
-```
-
-You should see `🐾 +docs⚑` appear naturally in the response.
 
 ---
 
